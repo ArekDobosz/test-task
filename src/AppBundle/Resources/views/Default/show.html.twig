@@ -1,0 +1,51 @@
+{% extends "AppBundle::base.html.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            
+            {% for type,msg in app.session.flashbag.all() %}
+                {% for m in msg %}
+                    <div class="alert alert-{{ type }} text-center">
+                        <h3>{{ m }}</h3>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            
+            <div class="panel panel-info">
+                <div class="panel-heading text-center"><h3>Formularz kontaktowy</h3></div>
+                <div class="panel-body">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'} }) }}
+                    
+                        <div class="form-group {{ form_errors(form.sender) ? 'has-error' : '' }}">                       
+                        {{ form_label(form.sender) }}
+                        {{ form_widget(form.sender, {'attr': {'class': 'form-control'} }) }}
+                        {{ form_errors(form.sender, {'attr': {'class': 'danger'} }) }}
+                        </div>
+                        
+                        <div class="form-group {{ form_errors(form.email) ? 'has-error' : '' }}">                       
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control'} }) }}
+                        {{ form_errors(form.email) }}
+                        </div>
+                        
+                        <div class="form-group {{ form_errors(form.title) ? 'has-error' : '' }}">                       
+                        {{ form_label(form.title) }}
+                        {{ form_widget(form.title, {'attr': {'class': 'form-control'} }) }}
+                        {{ form_errors(form.title) }}
+                        </div>
+                        
+                        <div class="form-group  {{ form_errors(form.content) ? 'has-error' : '' }}">                       
+                        {{ form_label(form.content) }}
+                        {{ form_widget(form.content, {'attr': {'class': 'form-control'} }) }}
+                        {{ form_errors(form.content) }}
+                        </div>
+                        
+                        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success pull-right'} }) }}
+                        
+                    {{  form_end(form)}}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
