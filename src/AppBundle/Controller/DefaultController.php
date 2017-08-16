@@ -14,6 +14,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use AppBundle\Entity\Contact;
+
 use AppBundle\Form\ContactForm;
 
 class DefaultController extends FOSRestController
@@ -25,7 +27,9 @@ class DefaultController extends FOSRestController
      */
     public function sendAction(Request $request, \Swift_Mailer $mailer) {
         
-        $form = $this->createForm(ContactForm::class, null, [
+        $Contact = new Contact();
+        
+        $form = $this->createForm(ContactForm::class, $Contact, [
             'csrf_protection' => false,        
         ]);
         
@@ -35,23 +39,23 @@ class DefaultController extends FOSRestController
             return $form;
         }
         
-        $data = $request->request->all();
-        
-        if($this->sendMail($data, $mailer)) {
+        if($this->sendMail($Contact, $mailer)) {
             return new View("Email has sent", Response::HTTP_OK);
         }
+        
+        return $form;
     }
     
-    private function sendMail(array $data, $mailer) {
+    private function sendMail(Contact $Contact, $mailer) {
         
-        $from = $data['email'];
-        $content = $data['content'];
-        $sender = $data['sender'];
-        $title = $data['title'];
+        $from = $Contact->getEmail();
+        $content = $Contact->getContent();
+        $sender = $Contact->getSender();
+        $title = $Contact->getTitle();
 
         $message = (new \Swift_Message())
                 ->setSubject($title)
-                ->setFrom(['botblackd988@gmail.com' => 'Arek Dobosz'])
+                ->setFrom($from)
                 ->setReplyTo($from)
                 ->setTo($this->email)
                 ->setBody(
