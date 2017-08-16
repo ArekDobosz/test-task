@@ -12,6 +12,10 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+            
+        api_docs:
+            pattern: ^/doc
+            anonymous: true
 
         main:
             anonymous: ~
